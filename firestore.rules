@@ -1,0 +1,43 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Regra padrão de negação para garantir modelo Zero-Trust
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Endpoint de teste de conectividade segura
+    match /test/connection {
+      allow read: if true;
+    }
+
+    // Perfil individual do jogador: somente o próprio dono pode ler ou gravar
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create, update: if isOwner(userId);
+      allow delete: if false;
+    }
+
+    // Progresso salvo do jogo da fazenda em subcoleção do usuário
+    match /users/{userId}/gameState/{docId} {
+      allow read: if isOwner(userId);
+      allow create, update: if isOwner(userId);
+      allow delete: if false;
+    }
+
+    // Progresso salvo do jogo da fazenda: estritamente restrito ao usuário autenticado
+    match /games/{userId} {
+      allow read: if isOwner(userId);
+      allow create, update: if isOwner(userId);
+      allow delete: if false;
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "AgroInvest — Plante hoje, invista no amanhã",
+  "description": "Simulador de fazenda e investimentos brasileiros: cultive a terra, aprenda sobre renda fixa, ações, reserva de emergência e construa seu patrimônio.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

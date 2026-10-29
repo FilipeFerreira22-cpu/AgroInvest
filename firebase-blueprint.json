@@ -1,0 +1,82 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile containing player nickname, email and setup metadata",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Unique Firebase Authentication UID of the player"
+        },
+        "email": {
+          "type": "string",
+          "description": "Player email address"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Player display nickname in the farm"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO timestamp of account creation"
+        },
+        "tutorialCompleted": {
+          "type": "boolean",
+          "description": "Whether the guided onboarding tutorial was completed or skipped"
+        },
+        "initialBonusGranted": {
+          "type": "boolean",
+          "description": "Ensures initial bonus is only granted once per account"
+        }
+      },
+      "required": ["uid", "displayName"]
+    },
+    "GameSave": {
+      "title": "GameSave",
+      "description": "Individual game progress document containing all farm state, custody positions and finances",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Player UID owning this farm save"
+        },
+        "day": {
+          "type": "number",
+          "description": "Current simulation day"
+        },
+        "cashAvailable": {
+          "type": "number",
+          "description": "Liquid cash available"
+        },
+        "emergencyReserve": {
+          "type": "number",
+          "description": "Emergency reserve balance"
+        },
+        "playerLevel": {
+          "type": "number",
+          "description": "Player level"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp of the last save"
+        }
+      },
+      "required": ["userId", "day", "cashAvailable"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Individual user profile records"
+    },
+    "/users/{userId}/gameState/{docId}": {
+      "schema": "GameSave",
+      "description": "Individual game state subcollection for player"
+    },
+    "/games/{userId}": {
+      "schema": "GameSave",
+      "description": "Individual game state and financial custody for each player"
+    }
+  }
+}
